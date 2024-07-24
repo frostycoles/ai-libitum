@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const emit = defineEmits(['createStory'])
+
 const storyPieces = ref({
   names: generateStringArray(),
   places: generateStringArray(2, 3),
@@ -9,11 +11,29 @@ const storyPieces = ref({
 
 function generateStringArray (minLength = 2, maxLength = 4) {
   const randomNumber = Math.floor(Math.random() * (maxLength - minLength) + minLength)
-  return randomNumber ? Array(randomNumber).join('.').split('.') : undefined
+  return randomNumber ? Array(randomNumber).join('.').split('.').map((i) => ({value: i, valid: true})) : undefined
 }
 
 function sentenceCase (str: string) {
   return str?.length ? `${str.slice(0,1).toUpperCase()}${str.slice(1)}` : '';
+}
+
+function create () {
+  let valid = true;
+  const storyArray = Object.values(storyPieces.value);
+  storyArray.forEach(items => {
+    if (items?.length) {
+      items.forEach((item) => {
+        if (!item.value) {
+          item.valid = false
+          valid = false
+        }
+      })
+    }
+  });
+  if (valid) {
+    emit('createStory', storyPieces.value)
+  }
 }
 </script>
 <template>
@@ -29,12 +49,15 @@ function sentenceCase (str: string) {
             <InputText
               v-for="(item, index) in storyPieces[key]"
               type="text" 
-              v-model="storyPieces[key][index]"
+              v-model="storyPieces[key][index].value"
+              :invalid="!item.valid"
               :placeholder="`${sentenceCase(key).slice(0, -1)} ${index + 1}`"
+              @update:model-value="item.valid = !!item.value"
             />
           </div>
         </div>
       </div>
     </ClientOnly>
+    <Button class="my-4" label="Create Story" @click="create" />
   </div>
 </template>
