@@ -32,7 +32,16 @@ function create () {
     }
   });
   if (valid) {
-    emit('createStory', storyPieces.value)
+    const {names, places, verbs, adverbs, adjectives} = storyPieces.value;
+    const pieceMap = (i: {value: string, valid: boolean}) => i.value;
+    const pieces = {
+      names: names?.map(pieceMap),
+      places: places?.map(pieceMap),
+      verbs: verbs?.map(pieceMap),
+      adverbs: adverbs?.map(pieceMap),
+      adjectives: adjectives?.map(pieceMap)
+    }
+    emit('createStory', pieces)
   }
 }
 </script>

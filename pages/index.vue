@@ -1,6 +1,6 @@
 <script setup lang="ts">
 function createStory(pieces) {
-  console.log('frostycoles', { pieces });
+  $fetch('/api/story/create', { method: 'POST', body: { pieces } });
 }
 </script>
 <template>
