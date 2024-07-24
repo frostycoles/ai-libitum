@@ -1,5 +1,5 @@
 <template>
   <div>
-    <StorySetup />
+    Set up your story
   </div>
 </template>
