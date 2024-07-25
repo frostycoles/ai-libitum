@@ -61,7 +61,7 @@ function create () {
               v-model="storyPieces[key][index].value"
               :invalid="!item.valid"
               :placeholder="`${sentenceCase(key).slice(0, -1)} ${index + 1}`"
-              @update:model-value="item.valid = !!item.value"
+              @blur="item.valid = !!item.value"
             />
           </div>
         </div>
