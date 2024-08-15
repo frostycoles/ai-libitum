@@ -23,12 +23,10 @@ function copyStory () {
   <div>
     <Toast />
     <div v-if="story" class="p-10">
-      <div>
-        {{ story }}
-      </div>
+      <div v-html="story" style="line-height: 1.9em;" />
       <div class="flex gap-2 flex-wrap">
         <Button class="my-4" label="Copy Story" @click="copyStory" />
-        <!-- <Button class="my-4" severity="warn" label="Create new Story" /> -->
+        <Button class="my-4" severity="warn" label="Create new Story" @click="story = ''" />
       </div>
     </div>
     <div v-else-if="loading" class="p-10">
@@ -37,3 +35,36 @@ function copyStory () {
     <StorySetup v-else @create-story="createStory" />
   </div>
 </template>
+
+<style>
+.name {
+  border: 1px solid blue;
+  border-radius: 6px;
+  background-color: aqua;
+  padding: 2px;
+}
+.place {
+  border: 1px solid green;
+  border-radius: 6px;
+  background-color: greenyellow;
+  padding: 2px;
+}
+.verb {
+  border: 1px solid red;
+  border-radius: 6px;
+  background-color: orange;
+  padding: 2px;
+}
+.adjective {
+  border: 1px solid purple;
+  border-radius: 6px;
+  background-color: pink;
+  padding: 2px;
+}
+.adverb {
+  border: 1px solid grey;
+  border-radius: 6px;
+  background-color: lightcyan;
+  padding: 2px;
+}
+</style>
