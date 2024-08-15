@@ -30,11 +30,25 @@ const edenApiHeader = {authorization: `Bearer ${edenAiApiKey}`}
 
 export function getStory(pieces: Record<string, string[]>) {
   const keys = Object.keys(pieces);
-  const storyComponents = keys.filter(p => pieces[p]).map((i) => `${i} ${pieces[i].join(', ')}`).join(' and the ');
-  const message = `Tell me a short funny story including the ${storyComponents}.`
+  const storyComponents = keys.filter(p => pieces[p]).map((i) => `${i} ${pieces[i].map((t, index) => `${i.slice(0, i.length - 1)}${index}`)}`).join(' and the ');
+  const message = `Tell me a short funny story using placeholders for the ${storyComponents}.`
+  console.log('frostycoles', { message });
   return sendChatMessage(message).then((resp) => {
-    return resp?.openai?.generated_text || null
+    return resp?.openai?.generated_text ? replacePlaceholders(resp.openai.generated_text, pieces) : null
   })
+}
+
+function replacePlaceholders(story: string, pieces: Record<string, string[]>) {
+  const placeholders = Object.entries(pieces).reduce((a, [key, items]) => {
+    const p = items.map((it, ind) => [`${key.slice(0, key.length - 1)}${ind}`, it])
+    a.push(...p)
+    return a
+  }, ([] as string[][]))
+  placeholders.forEach(i => {
+    const [p, n] = i
+    story = story.replaceAll(p, n)
+  });
+  return story
 }
 
 function sendChatMessage(message: string) {
