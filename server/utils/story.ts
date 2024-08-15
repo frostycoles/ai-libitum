@@ -40,7 +40,7 @@ export function getStory(pieces: Record<string, string[]>) {
 
 function replacePlaceholders(story: string, pieces: Record<string, string[]>) {
   const placeholders = Object.entries(pieces).reduce((a, [key, items]) => {
-    const p = items.map((it, ind) => [`${key.slice(0, key.length - 1)}${ind}`, it])
+    const p = items.map((it, ind) => [` ${key.slice(0, key.length - 1)}${ind}`, ` <span class="${key.slice(0, key.length - 1)}">${it}</span>`])
     a.push(...p)
     return a
   }, ([] as string[][]))
